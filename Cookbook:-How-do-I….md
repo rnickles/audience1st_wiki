@@ -17,3 +17,27 @@ How do I create hyperlinks that take the customer to the ticket purchase page wi
 If I have an invalid, bad or undeliverable US mailing address for a customer, how do I prevent it from appearing in mailing lists?
 
 > Locate the customer's record and click Contact Info tab.  You can either blank out the address fields or check the box for "Don't send me materials by US Mail".  Either action will prevent the customer from appearing in mailing lists as long as the "Require valid US Mail address" is checked when generating the list. 
+
+Help! How do I immediately stop (shut off) advance online sales for a performance?
+
+> Go to Season, click on the show name, then click on the performance date. Set "Advance sales stop" to a date and time earlier than the current time. Note that box office agents can always sell beyond the advance sales time (and even beyond curtain time), and can always sell beyond any limits placed on house capacity or on specific ticket types.
+
+How do I give comps to a customer?
+
+> Navigate to the customer's account page (see "How do I look up a customer?" under Customers) and click on My Tickets, then click the Add Comps button in the "yellow ribbon" of buttons just below the main navigation tabs. You must select which type of comp to add, how many, and what performance to redeem them for (or you can leave them open and have the customer reserve them herself later). Note: If the performance you want to reserve the comps for doesn't appear in the dropdown menu, you probably forgot to allow that type of Comp to be redeemed for that performance. See "How do I associate a voucher type with a particular performance" above.
+
+How are financial reports broken down? What are Account Codes and why would I want to use them?
+
+> You can generate reports of earned revenue (ticket sales) and unearned revenue (donations and grants). The reports are broken down by show (for earned revenue), by Account Code, and by payment method. Account Codes are associated with each voucher type or donation. An Account Code consists of a name and optional account number (for use in programs like QuickBooks where you want to break down revenue and expenses into subcategories). They are optional: if you don't set up your own Account Codes and assign them to voucher types, the same generic Account Code will be assigned to all of them. The Add/Edit Account Codes screen can be reached by going to the Voucher Types listing and clicking on any existing voucher type (or going to the Voucher Types listing and creating a new Voucher Type). 
+
+> Payment method refers to how the money came to your organization as a result of selling the product: Web-Credit Card (all transactions channeled through Stripe), Cash, Check, External Vendor (proceeds from other sales channels such as Goldstar). If you want to categorize income from different external vendors (e.g. Goldstar vs. TBA), the best way is to assign different Account Codes to the voucher types fulfilled through each vendor, since otherwise all "external vendor" income will be lumped together in a single category. 
+
+> Separately from the above categories, revenue is always broken down by show. So even if all of your regular revenue vouchers have the same Account Code and all were purchased in the same way, reports will indicate the subtotals per show. 
+
+If I change the Account Code on a voucher type, is it retroactive?
+
+> Yes, in the sense that reports will now observe the new Account Codes. For example, if you've already imported historical will-call data from multiple external vendors, you can "retroactively" assign different Account Codes to the voucher types fulfilled by each vendor; then the financial reports will always subtotal by vendor as well as by show, purchase method, etc.
+
+If I change the price on a voucher type, is it retroactive?
+
+> The change affects future vouchers, but not those already sold, in reports.  You shouldn't do this: it's better to just create a new voucher type and disable all Redemptions of the old one.

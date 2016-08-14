@@ -2,7 +2,7 @@
 
 We will host Audience1st for you in a Tier 1 datacenter with secure, encrypted-at-rest daily backup of all your sales and patron data.
 
-Email the following information to ![](email.png):
+Email the following information to ![](http://i.imgur.com/nFcZLlc.png):
 
   * Name and location of your theater/organization
   * Your name and position

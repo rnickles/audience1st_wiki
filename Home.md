@@ -125,5 +125,5 @@ general-seating venues. This may change in the future.
 
 * No printing on ticket stock: Audience1st emphasizes an electronic
 ticketing/will-call scenario. Coming soon, customers or the box office
-will be able to self-print tickets on a standard printer. However,
-specialized ticket printing hardware is not supported at this time. 
+will be able to self-print tickets at home. However, there are no plans
+to support specialized ticket printing hardware.

@@ -1,14 +1,14 @@
 # Audience1st: Ticket Sales, Subscriber/Patron Management, Donation Tracking Features and FAQs
 
 Audience1st integrates your own ticket sales, third-party ticket sales
-(such as Theatre Bay Area and Golstar), box office reports,
+(such as Theatre Bay Area and Goldstar), box office reports,
 calendar and ticket availability information (which can be easily
-exported to your own web site), attendance statistics, donor management
+RSS'd into your web site), attendance statistics, donor management
 and followup, online donations, and support for email marketing
 campaigns, all in one Web-based system. 
 
-Audience1st was developed specifically for the needs of a nonprofit
-community theater: 
+Audience1st was developed specifically for the needs of small-to-medium nonprofit
+community theaters. 
 
 For more complete descriptions and operating instructions, see the [wiki](http://github.com/armandofox/audience1st/wiki).
 

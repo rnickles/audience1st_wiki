@@ -8,11 +8,11 @@ and followup, online donations, and support for email marketing
 campaigns, all in one Web-based system. 
 
 Audience1st was developed specifically for the needs of small-to-medium nonprofit
-community theaters. 
+community theaters.  In particular, it's aligned closely with the philosophy espoused by Danny Newman in his book [Subscribe Now!](http://amzn.to/2tG0ce6): the idea of someone being a subscriber or not-a-subscriber (even if you sell multiple different types of subscriptions) is deeply wired into Audience1st's design, so that (for example) you can create ticket discounts and promotions available to subscribers only, give subscribers earlier access to purchase tickets for popular shows, get reports that help you both manage and understand your current subscriber base and identify prospects for future subscription, and so on.
 
 The table of contents at right will help you navigate this users' guide. This page is a summary of the main features; the other sections step you through using the actual software.
 
-If you're interested in standing up and operating the software yourself, see the README.md in the main code repo. 
+If you're interested in standing up and operating the software yourself, see the README in the main code repo. 
 If you're interested in having me host and operate it for you, click "Hosting quote request" at right.
 
 ## Flexible Ticketing

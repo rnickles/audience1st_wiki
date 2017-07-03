@@ -10,7 +10,10 @@ campaigns, all in one Web-based system.
 Audience1st was developed specifically for the needs of small-to-medium nonprofit
 community theaters. 
 
-For more complete descriptions and operating instructions, see the [wiki](http://github.com/armandofox/audience1st/wiki).
+The table of contents at right will help you navigate this users' guide. This page is a summary of the main features; the other sections step you through using the actual software.
+
+If you're interested in standing up and operating the software yourself, see the README.md in the main code repo. 
+If you're interested in having me host and operate it for you, click "Hosting quote request" at right.
 
 ## Flexible Ticketing
 

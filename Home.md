@@ -123,10 +123,8 @@ website.
 
 # Features Not Supported At This Time
 
-* No reserved seating: currently Audience1st handles only
-general-seating venues. This may change in the future. 
+* No reserved seating: we expect this feature to become available in Fall 2019.
 
-* No printing on ticket stock: Audience1st emphasizes an electronic
-ticketing/will-call scenario. Coming soon, customers or the box office
-will be able to self-print tickets at home. However, there are no plans
-to support specialized ticket printing hardware.
+* No printing on ticket stock: While customers are free to print out
+confirmation pages, Audience1st emphasizes an electronic
+ticketing/will-call scenario. 

@@ -1,5 +1,3 @@
-# Notes on testing
-
 There is a set of Cucumber+Capybara scenarios that test all major user-facing flows and most boxoffice-facing flows, and additional specs to fill gaps.  The current configuration uses [CodeClimate Test Reporter](https://docs.codeclimate.com/docs/configuring-test-coverage) (CCTR) as part of the Travis CI flow, and reports combined Cucumber + RSpec coverage to CodeClimate to serve the coverage badge.
 
 Because my `config/application.yml.asc` is GPG-encrypted, Travis expects to find the decryption passphrase in the environment variable `KEY`.  See the main page for how to set up your own `application.yml` which you can version or encrypt or make available to Travis however you like.

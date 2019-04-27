@@ -100,8 +100,5 @@ Case does not matter.
 
 ## Other tables
 
-Most of the other tables handle ancillary work: `Options` tracks global
-option (settings) values, `Purchasemethod` (which really should just be
-some constants) are ways to pay for a purchase, and there's a few other
-tables that are largely self-explanatory. 
-
+Most of the other tables handle ancillary work: `options` tracks global
+option (settings) values, `labels` tracks boxoffice-definable labels that can be used to "tag" customers (via the join table `customers_labels`), `shows` and `showdates` define those things, etc.

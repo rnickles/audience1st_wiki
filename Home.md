@@ -1,130 +1,168 @@
-# Audience1st: Ticket Sales, Subscriber/Patron Management, Donation Tracking Features and FAQs
+# Preparing to develop
 
-Audience1st integrates your own ticket sales, third-party ticket sales
-(such as Theatre Bay Area and Goldstar), box office reports,
-calendar and ticket availability information (which can be easily
-RSS'd into your web site), attendance statistics, donor management
-and followup, online donations, and support for email marketing
-campaigns, all in one Web-based system. 
+In addition to the app, you will need a Stripe account, though you can 
+use just the test-mode keys during development.
 
-Audience1st was developed specifically for the needs of small-to-medium nonprofit
-community theaters.  In particular, it's aligned closely with the philosophy espoused by Danny Newman in his book [Subscribe Now!](http://amzn.to/2tG0ce6): the idea of someone being a subscriber or not-a-subscriber (even if you sell multiple different types of subscriptions) is deeply wired into Audience1st's design, so that (for example) you can create ticket discounts and promotions available to subscribers only, give subscribers earlier access to purchase tickets for popular shows, get reports that help you both manage and understand your current subscriber base and identify prospects for future subscription, and so on.  I also spent several years on the Board of Directors of Altarena Playhouse in northern California, and many of the [lessons I learned there](https://docs.google.com/document/d/e/2PACX-1vR0e4cdUL18cZmc92OAZyHKoeGrOX9-kBhFFkPAqMQw0KxkpjbbJRzyiI3muG66Sb68nWM1-hH5nNN4/pub) during our revitalization of the theater's operations in the mid 2000s informed the features of Audience1st.
+## Multi-tenant setup
 
-The table of contents at right will help you navigate this users' guide. This page is a summary of the main features; the other sections step you through using the actual software.
+**This is important.** By default Audience1st is designed to be setup
+as [multi-tenant using the `apartment`
+gem](https://github.com/influitive/apartment), where each theater is a
+tenant.  Audience1st determines the tenant name for a given request
+fomr the first subdomain in the URI, e.g. if your deployment domain is
+`somewhere.com`, then `my-theater.somewhere.com` selects `my-theater`
+as the tenant for that request.
 
-If you're interested in standing up and operating the software yourself, see the README in the main code repo. 
-If you're interested in having me host and operate it for you, click "Hosting quote request" at right.
+For development or staging, the recommended approach is to setup a
+single tenant.  In this example we will call it `my-tenant-name`; you can
+call it whatever you want, but if you deploy to Heroku for staging,
+the app name `my-tenant-name.herokuapp.com` must exist, so choose
+the name carefully.
 
-## Flexible Ticketing
+1.  Create a file `config/application.yml` containing the following:
 
-* Payments are handled via integration with
-[Stripe](http://stripe.com).  For walk-up and phone orders, you can also
-choose to accept cash or checks. 
+```yaml
+tenant_names: my-tenant-name
+session_secret: "exactly 128 random ASCII characters"
+attr_encrypted_key: "exactly 32 random characters"
+STRIPE_KEY: "Publishable key from a Stripe account in test mode"
+STRIPE_SECRET: "Secret key from a Stripe account in test mode"
+```
 
-* Set up multiple ticket types and price points for each
-production. Per-performance overrides are possible if you want to offer
-special tickets, promotions, etc. for selected performances only. 
+(In a production setting, you'd have several tenant names separated by
+commas.)
+**Please don't version this file or include it in pull requests, nor
+modify the existing `config/application.yml.asc`.  The `.gitignore` is
+set to ignore `config/application.yml` when versioning.** 
 
-* Set up, redeem, and track "promo codes" that reveal special prices.
+2. Create a `config/database.yml` file (and don't version it; it is
+also git-ignored) containing `development:` and
+`test:` targets:
 
-* Any type of ticket can be capacity-controlled and have start sales/end
-sales dates that override the defaults for the production (allowing,
-e.g., a "preferred" group of patrons to have early access to ticket
-sales, or allowing a time-limited promotional ticket price). 
-Holdbacks (such as for group sales, TBA Free Night of Theatre, etc.)
-are easy to do on a per-performance basis.  
+```yaml
+development:
+  adapter: sqlite3
+  database: db/my-tenant-name.sqlite3
+test:
+  adapter: sqlite3
+  database: db/test.sqlite3
+```
 
-* All actions are audited so you can tell who entered what transaction,
-in case a customer claims a discrepancy. 
+(The `production` configuration, if any, depends on your deployment
+environment.  Heroku ignores any `production` configuration because it
+sets its own using PostgreSQL.)
 
-* Comps can be added to customer accounts by boxoffice staff. Different
-types of comps (professional, performer, media, etc.) can be tracked
-separately and capacity-controlled per performance. 
+3.  After running `bundle` as usual, you can run `bundle exec rake
+db:schema:load` to load the database schema into each tenant.
 
-* Sell course enrollments and retail items (swag, raffle tickets, etc.) as well as tickets.
+4.  Run `rake db:seed` on the development database,
+which creates a few special users, including the administrative user
+`admin@audience1st.com` with password `admin`.
 
-* Patrons can buy or reserve online, or your phone staff can easily
-enter phone orders, all with automatic email confirmations whenever reservations are made or cancelled.
+5.  To start the app, say `rails server webrick` as usual (assuming you
+want to use the simpler Webrick server locally; the `Procfile` uses 
+a 2-process Puma server for the production environment currently), but in your
+browser, **do not** try to visit `localhost:3000`; instead visit
+`http://my-tenant-name.lvh.me:3000` since the multi-tenant
+selection relies on the first component of the URI being the tenant
+name.  This uses the [free lvh.me
+service](https://nickjanetakis.com/blog/ngrok-lvhme-nipio-a-trilogy-for-local-development-and-testing#lvh-me)
+that always resolves to `localhost`.
 
-* Create and sell virtually any combination of tickets imaginable as a
-subscription:  per-show,
-restricted to specific performances only (e.g. "Matinee Series"), flex
-pass (vouchers valid for any performance), individual series, or one of
-everything.  Easily identify subscribers on all reports and give them exclusive or advance access to certain tickets.
+5.  The app should now be able to run and you should be able to login
+with the administrator password.  Later you can designate other users as administrators.
 
-* Subscribers can make and cancel their own subscriber reservations online with no
-fee (at your discretion) and no box office intervention. 
+5.  If you want fake-but-realistic data, also run the task
+`TENANT=my-tenant-name bundle
+exec rake staging:initialize`.  This creates a bunch of fake users,
+shows, etc., courtesy of the `faker` gem.
 
-* Customers can self-purchase online with a credit card or you can have
-orders entered by your phone staff on behalf of a customer, with email
-confirmations automatically generated.  The phone staff see the same user interface as patrons, so it's easy
-for a patron to become a phone staff volunteer.  
+# Deploying to production or staging
 
+These instructions are for Heroku and assume that you have created a
+Heroku app container and provisioned it with the basic (free) level of
+Heroku Postgres.  You can adapt these instructions for other
+deployment environments.
 
-* Comments can be added to any reservation by customer or staff, at time
-of purchase or after purchase (e.g. special seating needs, guest of
-honor, etc.) 
+1. Get the code pushed to the deployment environment (`git push heroku
+master` usually).
 
-## Front of House
+2. Ensure that the `config/application.yml` on your development
+computer contains the correct configuration data.
 
+3. If using Heroku, `figaro heroku:set -e production` to make
+`application.yml`'s environment variables available to Heroku.
 
-* A separate, one-screen, streamlined user interface for walk-up sales
-(at the box office) makes it easy to train volunteers to do limited
-box-office-only work selling tickets at showtime, accepting cash,
-checks, a manually entered credit card number (when patron presents
-card), or a USB-attached [card swipe
-device](http://www.amazon.com/MagTek-Mini-Swipe-Readers-21040108/dp/B00466QS5U)
-(ditto). 
+4. In addition, ensure that the environment variable `tenant_names` in
+your deployment environment is set to a comma-separated list of all
+your tenants.  For staging-type deployments to Heroku, the correct
+value is the Heroku appname, so if your app is
+`luminous-coconut.herokuapp.com`, the `tenant_names` environment
+variable should be set to `luminous-coconut`.  (It's best **not** to
+put this in `config/application.yml`, because you may have different
+tenant(s) in development than in production/staging.)
 
-* Front of house "dashboard" displays the number of seats sold for
-tonight's show, number remaining, number held back, and number of
-advance purchasers who have checked in.  When a will-call patron
-arrives, just check off their name and the totals are updated. 
-Close-of-boxoffice report lets you easily reconcile total walkup sales
-against box office cash inventory. 
+5.  If this is the first deployment, `heroku run rake db:migrate` 
+to create all the tenant schemata,
+then `heroku run rake db:seed` to create the basic admin
+account for each tenant.  Only portable SQL features are used,
+and the schema has been tried with MySQL, Postgres, and SQLite.
 
+6. If the environment variable `EDGE_URL` is set on Heroku,
+`config.action_controller.asset_host` will be set to that value to
+serve static assets from a CDN, which you must configure (the
+current deployment uses the Edge CDN add-on for Heroku, which uses
+Amazon CloudFront as a CDN).  If not set, assets will be served the
+usual way without CDN.  (If you're just deploying a staging server,
+you should not set this variable.)
 
-## Back office: Audience Development & Stewardship
+7. The task `Customer.notify_upcoming_birthdays` emails an administrator or boxoffice manager with information about customers whose birthdays are coming up soon.  The threshold for "soon" can be set in Admin > Options.
 
-* Flexible reporting can be used to select any subset of customers
-(e.g., "all customers who saw show X" or "all customers who have made at
-least 3 purchases in the past year").  Reports can be exported to
-Mailchimp for mail campaigns, or to Excel spreadsheets to create mailing
-lists or mailing labels.
+## Integration: Sending transactional email in production
 
-* Customers can donate online at time of purchase; donations received by
-mail or in person can also be recorded by staff.  Donations are tracked
-and tied to customer record along with ticket purchases, giving you a
-comprehensive view of patron behavior over time. 
+In production, email confirmations are sent for various things.
+Audience1st is configured to use Sendgrid.  If you do nothing,
+transactional emails will be suppressed in your staging/production
+environment.  If you want to use
+Sendgrid for real email sending in your staging/production app, do the following:
 
-* Track donors, donations, and acknowledgment letters.  Donation
-reporting/search allows exporting of selected donors to Excel 
-for further analysis or mail-merge. 
+1. Provision the Sendgrid add-on for Heroku and obtain a Sendgrid API key.
 
-* Setup different donation campaigns with their own landing pages and
-separate QuickBooks account codes, and run reports on donors based on
-almost any donation critera.  You can also track in-kind donations. 
+2. `config/application.yml` file should contain a valid Sendgrid API key
+value for `SENDGRID_KEY`.  You may need to `figaro heroku:set -e
+production` to get the key value into Heroku's production environment.
 
-* Define your own customer "tags" (VIP, Prospective Board Member, etc.)
-and search for customers by tags.
+3. Login to Audience1st as
+an administrator, go to Options, and enter the Sendgrid domain
+(i.e. the domain from which transactional emails will appear to come,
+usually something like `your-app.herokuapp.com` for a staging
+environment).
 
-* Import historical data--mailing lists and customer lists--in Excel
-format.  Import will-call lists from popular third-party ticketing
-services like Goldstar and Brown Paper Tickets. 
+4.  Be sure that same domain name appears among the "allowed domains"
+in the Sendgrid settings, which can be accessed via the Resources >
+Sendgrid control panel in Heroku.
 
-## Integration With Your Own Site and Other Services
+# To disable or change multi-tenancy
 
-* Match your Web site's look and feel using CSS. 
+This requires removing a few files.  **Do not make any PRs that delete those files** since we need
+them in the main/production version.  
 
-* RSS feeds provide real-time ticket availability info directly to your
-website.
+1. Remove `gem 'apartment'` from the `Gemfile` before running `bundle
+install`
 
-* Customers can opt out of email, paper mailings, or both.
+2. Remove the file `config/initializers/apartment.rb`
 
-# Features Not Supported At This Time
+3. Make sure your `config/application.yml` does **not**
+contain any mention of `tenant_names`
 
-* No reserved seating: we expect this feature to become available in Fall 2019.
+# To change the tenant selection scheme
 
-* No printing on ticket stock: While customers are free to print out
-confirmation pages, Audience1st emphasizes an electronic
-ticketing/will-call scenario. 
+If you decide to use multi-tenancy but change the
+tenant-selection scheme in `config/initializers/apartment.rb` 
+(see the `apartment` gem's documentation for
+what this means), you'll also need to edit the before-suite logic in
+`features/support/env.rb` and `spec/support/rails_helper.rb`.  Those
+bits of code ensure that testing works properly with multi-tenancy
+enabled, but they rely on the tenant name being the DNS subdomain.  If
+you don't know what this means, you should probably ask for assistance
+deploying this software. :-)

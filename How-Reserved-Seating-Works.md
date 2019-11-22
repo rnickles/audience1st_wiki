@@ -40,14 +40,14 @@ The setup function should fill in the following slots of the `A1.seatmap` data s
 
 ## Setup function part 2: render correct seatmap
 
-Once the setup function has set the above slots, it must get its hands on the JSON representation of an A1 seatmap, as returned by the `Seatmap` model.  The easiest way to get this is to call the endpoint `/ajax/seatmap/:id`, which returns a JSON object representing the seatmap associated with showdate ID `:id`.  In particular, this object has the following slots:
+Once the setup function has set the above slots, it must get its hands on the JSON representation of an A1 seatmap, as returned by the `Seatmap` model.  The easiest way to get this is to call the endpoint `/ajax/seatmap/:id`, which returns a JSON object representing the seatmap associated with showdate ID `:id`.  In particular, this object has the following slots, which you don't need to interpret or care about if you use the AJAX endpoint to fetch the object:
 
 * `map`: the JSON representation of a seatmap used by the jQuery Seat Charts plugin
-* `seats`': the JSON representation of seat classes (categories, price points) used by the jQuery Seat Charts plugin
+* `seats`: the JSON representation of seat classes (categories, price points) used by the jQuery Seat Charts plugin
 * `unavailable`: an array of the seat numbers of unavailable seats
 * `image_url`: the URL of an image to use as the background to display behind the seating chart (for example, to show where the stage is located)
 
-(Note that some pages eagerly load this information for all showdates and keep it in a hidden form field, rather than doing an AJAX call.  That's probably uglier than needed.)
+(Note that some pages eagerly load this information for all showdates and keep it in a hidden form field, rather than doing an AJAX call.  That's probably uglier than needed.  Also, if you call the endpoint on a showdate ID that has no associated seatmap because it's reserved seating, you will get the object `{map: null}`.)
 
 Once the setup function has this JSON data (let's call it `jsSeats`), it should do the following:
 

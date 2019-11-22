@@ -47,7 +47,7 @@ Once the setup function has set the above slots, it must get its hands on the JS
 * `unavailable`: an array of the seat numbers of unavailable seats
 * `image_url`: the URL of an image to use as the background to display behind the seating chart (for example, to show where the stage is located)
 
-(Note that some pages eagerly load this information for all showdates and keep it in a hidden form field, rather than doing an AJAX call.  That's probably uglier than needed.  Also, if you call the endpoint on a showdate ID that has no associated seatmap because it's reserved seating, you will get the object `{map: null}`.)
+(Note that some pages eagerly load this information for all showdates and keep it in a hidden form field, rather than doing an AJAX call.  That's probably uglier than needed.  Also, if you call the endpoint on a showdate ID that has no associated seatmap because it's reserved seating, you will get the object `{"map": null}`.)
 
 Once the setup function has this JSON data (let's call it `jsSeats`), it should do the following:
 

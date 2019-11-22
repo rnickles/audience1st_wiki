@@ -1,6 +1,4 @@
-# Overview of main concepts
-
-## Patrons and Orders
+# Patrons and Orders
 
 * The _patron_ is the unit to which most operations are indexed.
 
@@ -8,7 +6,7 @@
 
 * A patron's view of their account is that it holds some number of _vouchers_.  Some of these may be _reserved_, for example if they bought tickets to a particular performance.  Some may be _open_, for example if they bought a subscription and want to reserve performance dates for specific shows.  Of those that are reserved, you may choose to allow patrons to self-cancel or self-change their reservations, or not.
 
-## Voucher Types and Redemptions
+# Voucher Types and Redemptions
 
 During season setup, you specify one or more _voucher types_.  Typically, a voucher type is either a specific kind of ticket at a specific price point (e.g. "Adult General Admission" at $35.00; "Press Comp" at $0.00), or one of several tickets included in a bundle (see below).
 
@@ -64,3 +62,8 @@ The initial deployment of Audience1st contains a single administrative user whos
 0. Next, create user records for additional staff (box office, phone orders, FOH staff, anyone who will need some level of administrative access).  See "Working with users" for how to do this.  Edit each user's Billing/Contact info, and under Admin settings for that user, set their privilege level as appropriate (you can always change it later).
 
 0. To import existing customer data, click the Import tab.  (Description TBD as this feature is under refurbishment)
+
+# Account Codes
+
+Account Codes are optional, arbitrary strings used in your internal financial reporting system; for example, QuickBooks Online uses 4-digit numbers to code accounts.  An Account Code can be attached to tickets and subscriptions, donations, retail-sale items, and nonticket purchases (e.g. exchange fees). The revenue reporting breaks out subtotals by account code.  There is always at least one Default Account Code, which cannot be deleted but can be changed.  That is, at least one Account Code must always exist.
+

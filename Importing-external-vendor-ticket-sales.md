@@ -12,4 +12,3 @@ The work of parsing the raw data to produce a set of `ImportableOrder`s is done 
 
 * `parse` - parse the data and return a collection of `ImportableOrder` objects.
 
-![](http://i63.tinypic.com/1kwv7.jpg)

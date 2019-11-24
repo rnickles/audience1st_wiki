@@ -59,8 +59,9 @@ A1.seatmap.setupMap();                                             // this shoul
 And when it is time to actually display the seatmap itself
 
 ```javascript
-A1.seatmap.max = 2;  // number of seats the user is supposed to choose
 $('#seating-charts-wrapper').removeClass('d-none').slideDown();  // reveal the seatmap
+A1.seatmap.max = 2;  // number of seats the user is supposed to choose
+A1.seatmap.setupMap();    // display bgnd image and properly center seatmap on page
 ```
 
 

@@ -19,6 +19,7 @@ As the user interacts with the seatmap, a designated "Seats selected" field on t
 
 Any flow that might use reserved seating needs to do the following:
 
+1. Render the partial `components/seatmap`.  It will be hidden by default, but it must be included in any view that **might** need to show the seatmap.
 1. Attach particular CSS selectors to various elements on the page, as described below.
 1. Provide a _setup_ function that sets up various slots in `A1.seatmap` as described below, and causes the seatmap to be rendered for interaction with the user.  
 1. Bind that setup function to the appropriate change event, such as the user selecting a date from a dropdown menu.  The function is invoked on **every** change, because if it detects that (e.g.) the user selects a  GA show, it might be necessary (e.g.) to re-hide the seatmap.
@@ -27,8 +28,6 @@ Any flow that might use reserved seating needs to do the following:
 ## Setup function part 1: set up reserved-seating info
 
 The setup function should fill in the following slots of the `A1.seatmap` data structure.  Non-required slots can be left empty.  Each of the following slots should be set to a jQuery selector expression, e.g. `$(.seat-display)`.  The expressions will be evaluated the first time the seatmap becomes visible on a given page.
-
-* `max`: an integer representing the number of seats the user must select.
 
 * `seatDisplayField`: where to display the seats chosen so far (e.g. "A1,A3").  Applying the class `.a1-passive-text-input` to a form field results in a read-only, undecorated, **but active** form field, which is what you need in order to ultimately submit the seat numbers as part of the form submission.
 
@@ -56,6 +55,14 @@ A1.seatmap.configureFrom(jsSeats);
 A1.seatmap.seats = $('#seatmap').seatCharts(A1.seatmap.settings);  // this should be factored out as common code
 A1.seatmap.setupMap();                                             // this should be factored out as common code
 ```
+
+And when it is time to actually display the seatmap itself
+
+```javascript
+A1.seatmap.max = 2;  // number of seats the user is supposed to choose
+$('#seating-charts-wrapper').removeClass('d-none').slideDown();  // reveal the seatmap
+```
+
 
 That's it.  If the user selects the right number of seats, the JS code will enable the "submit" button (`confirmSeatsButton`), the form will be submitted, and the controller action can check the "seats selected" element (`seatDisplayField`) for the actual seat numbers chosen.  If the user cancels without finishing selection, the seatmap will be hidden, selected-seat data will be cleared both internally and from the `seatDisplayField`, and the `resetAfterCancel` function will be called if one was provided.
 

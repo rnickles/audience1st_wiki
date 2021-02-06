@@ -3,7 +3,7 @@
 In addition to the app, you will need a Stripe account, though you can 
 use just the test-mode keys during development.
 
-## Multi-tenant setup
+## Multi-tenant setup and application secrets
 
 **This is important.** By default Audience1st is designed to be setup
 as [multi-tenant using the `apartment`
@@ -19,6 +19,13 @@ call it whatever you want, but if you deploy to Heroku for staging,
 the app name `my-tenant-name.herokuapp.com` must exist, so choose
 the name carefully.
 
+In addition, Audience1st uses the [`figaro` gem](https://github.com/laserlemon/figaro) to manage
+configuration variables and secrets, many of which are *necessary* to run the app 
+in production or development and even to run the tests.
+
+Therefore you must create a file containing the values of these secrets, some of which values 
+may differ between production and development/testing.
+
 1.  Create a file `config/application.yml` containing the following:
 
 ```yaml
@@ -27,13 +34,18 @@ session_secret: "exactly 128 random ASCII characters"
 attr_encrypted_key: "exactly 32 random characters"
 STRIPE_KEY: "Publishable key from a Stripe account in test mode"
 STRIPE_SECRET: "Secret key from a Stripe account in test mode"
+SENDGRID_KEY: "(optional) API key for Sendgrid email service"
 ```
 
-(In a production setting, you'd have several tenant names separated by
-commas.)
-**Please don't version this file or include it in pull requests, nor
+Note 1: If the `SENDGRID_KEY` is omitted, you won't be email to send transactional
+emails from the app, which may be fine.
+
+Note 2: In a production setting, you'd have several tenant names separated by
+commas.
+
+**Please don't version the `config/application.yml` file or include it in pull requests, nor
 modify the existing `config/application.yml.asc`.  The `.gitignore` is
-set to ignore `config/application.yml` when versioning.** 
+deliberately set to ignore `config/application.yml` when versioning.** 
 
 2. Create a `config/database.yml` file (and don't version it; it is
 also git-ignored) containing `development:` and
@@ -59,7 +71,7 @@ db:schema:load` to load the database schema into each tenant.
 which creates a few special users, including the administrative user
 `admin@audience1st.com` with password `admin`.
 
-5.  To start the app, say `rails server webrick` as usual (assuming you
+5.  To start the app, say `rails server webrick`  (assuming you
 want to use the simpler Webrick server locally; the `Procfile` uses 
 a 2-process Puma server for the production environment currently), but in your
 browser, **do not** try to visit `localhost:3000`; instead visit
@@ -69,6 +81,10 @@ name.  This uses the [free lvh.me
 service](https://nickjanetakis.com/blog/ngrok-lvhme-nipio-a-trilogy-for-local-development-and-testing#lvh-me)
 that always resolves to `localhost`.
 
+6.  **WARNING.** When you run `rails console` to get a REPL, the first thing you should type
+in the console is `Apartment::Tenant.switch! 'my-tenant-name'` to switch to the (only) tenant's
+database schema.
+
 5.  The app should now be able to run and you should be able to login
 with the administrator password.  Later you can designate other users as administrators.
 
@@ -76,6 +92,12 @@ with the administrator password.  Later you can designate other users as adminis
 `TENANT=my-tenant-name bundle
 exec rake staging:initialize`.  This creates a bunch of fake users,
 shows, etc., courtesy of the `faker` gem.
+
+# Running tests in CI
+
+Since the tests also rely on the value of the application secrets, you need to 
+set those values in the repo's environment variable settings in Travis CI. See
+the Testing page in this wiki for how to do that.
 
 # Deploying to production or staging
 

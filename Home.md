@@ -3,6 +3,14 @@
 In addition to the app, you will need a Stripe account, though you can 
 use just the test-mode keys during development.
 
+You need a local install of `phantomjs` to run the JavaScript-dependent scenarios.  On MacOS, you can install it
+via Homebrew; on *nix, use your favorite package manager.  Capybara needs to be able to find the `phantomjs` executable
+so make sure it is in your default execution path.
+
+Once you have the above, run `bundle install --without production` and ensure all gems get installed.
+
+Before running the app or its tests though, you must setup multi-tenancy and the secrets file.
+
 ## Multi-tenant setup and application secrets
 
 **This is important.** By default Audience1st is designed to be setup

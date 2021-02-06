@@ -101,11 +101,10 @@ with the administrator password.  Later you can designate other users as adminis
 exec rake staging:initialize`.  This creates a bunch of fake users,
 shows, etc., courtesy of the `faker` gem.
 
-# Running tests in CI
-
+At this point you should be able to run tests locally (`rake cucumber` and `rake rspec`).
 Since the tests also rely on the value of the application secrets, you need to 
 set those values in the repo's environment variable settings in Travis CI. See
-the Testing page in this wiki for how to do that.
+the Testing page in this wiki for how to do that and for more details on the test suite.
 
 # Deploying to production or staging
 
@@ -121,16 +120,11 @@ master` usually).
 computer contains the correct configuration data.
 
 3. If using Heroku, `figaro heroku:set -e production` to make
-`application.yml`'s environment variables available to Heroku.
-
-4. In addition, ensure that the environment variable `tenant_names` in
-your deployment environment is set to a comma-separated list of all
-your tenants.  For staging-type deployments to Heroku, the correct
+`application.yml`'s environment variables available to Heroku,
+including the value of `tenant_names`.  For staging-type deployments to Heroku, the correct
 value is the Heroku appname, so if your app is
 `luminous-coconut.herokuapp.com`, the `tenant_names` environment
-variable should be set to `luminous-coconut`.  (It's best **not** to
-put this in `config/application.yml`, because you may have different
-tenant(s) in development than in production/staging.)
+variable should be set to `luminous-coconut`.
 
 5.  If this is the first deployment, `heroku run rake db:migrate` 
 to create all the tenant schemata,

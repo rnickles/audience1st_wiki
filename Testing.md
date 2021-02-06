@@ -1,8 +1,16 @@
 There is a set of Cucumber+Capybara scenarios that test all major user-facing flows and most boxoffice-facing flows, and additional specs to fill gaps.  The current configuration uses [CodeClimate Test Reporter](https://docs.codeclimate.com/docs/configuring-test-coverage) (CCTR) as part of the Travis CI flow, and reports combined Cucumber + RSpec coverage to CodeClimate to serve the coverage badge.
 
+## PhantomJS
+
+You need a local install of `phantomjs` to run the JavaScript-dependent scenarios.  On MacOS, you can install it
+via Homebrew; on *nix, use your favorite package manager.  Capybara needs to be able to find the `phantomjs` executable
+so make sure it is in your default execution path.
+
 ## Test database
 
 The versioned file `config/database.yml.test` specifies a SQLite3 database for testing.
+Once you have created a proper `config/application.yml` as described on the main page, you should be able to successfully
+run all scenarios and all specs.  A local run takes 12-15 minutes to run all tests.
 
 ## Time
 

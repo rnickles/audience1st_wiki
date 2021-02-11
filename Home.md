@@ -126,11 +126,19 @@ value is the Heroku appname, so if your app is
 `luminous-coconut.herokuapp.com`, the `tenant_names` environment
 variable should be set to `luminous-coconut`.
 
-5.  If this is the first deployment, `heroku run rake db:migrate` 
-to create all the tenant schemata,
-then `heroku run rake db:seed` to create the basic admin
-account for each tenant.  Only portable SQL features are used,
-and the schema has been tried with MySQL, Postgres, and SQLite.
+5.  If this is the first deployment, you have to create the tenant(s) schema(ta).  
+To do this, first do `heroku run rake db:schema:load` to create and seed
+Postgres' `public` schema.  The `public` schema is not actually used by any
+Audience1st tenant but it is cloned whenever a new tenant is created and must be present
+or migrations will fail.  Next say 
+`heroku run TENANT=my-tenant-name rake a1client:create`, which will create the
+schema for `my-tenant-name`.  (The code for the Rake task in in `lib/tasks/client.rb`.)
+Finally, `heroku run rake db:migrate` to ensure the schema is up-to-date.
+From now on `rake db:migrate` and other database-related tasks will automatically
+be applied to all tenants.  Repeat the `a1client:create` task any time you need to
+add a tenant.  There is also an `a1client:drop` task to delete a tenant's schema and 
+all of its data.  Whenever the list of tenants changes, don't forget to also adjust
+the value of the `tenant_names` variable.
 
 6. If the environment variable `EDGE_URL` is set on Heroku,
 `config.action_controller.asset_host` will be set to that value to

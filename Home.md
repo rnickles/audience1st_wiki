@@ -42,10 +42,11 @@ session_secret: "exactly 128 random ASCII characters"
 attr_encrypted_key: "exactly 32 random characters"
 STRIPE_KEY: "Publishable key from a Stripe account in test mode"
 STRIPE_SECRET: "Secret key from a Stripe account in test mode"
-SENDGRID_KEY: "(optional) API key for Sendgrid email service"
+MAILGUN_SMTP_LOGIN: postmaster@mail.yourdomain.com
+MAILGUN_SMTP_PASSWORD: "your long SMTP password here"
 ```
 
-Note 1: If the `SENDGRID_KEY` is omitted, you won't be email to send transactional
+Note 1: If the Mailgun-related keys are omitted, you won't be email to send transactional
 emails from the app, which may be fine.
 
 Note 2: In a production setting, you'd have several tenant names separated by
@@ -153,26 +154,24 @@ you should not set this variable.)
 ## Integration: Sending transactional email in production
 
 In production, email confirmations are sent for various things.
-Audience1st is configured to use Sendgrid.  If you do nothing,
+Audience1st is configured to use Mailgun.  If you do nothing,
 transactional emails will be suppressed in your staging/production
 environment.  If you want to use
-Sendgrid for real email sending in your staging/production app, do the following:
+Mailgun for real email sending in your staging/production app, do the following:
 
-1. Provision the Sendgrid add-on for Heroku and obtain a Sendgrid API key.
+1. Provision the Mailgun add-on for Heroku and obtain the necessary credentials.
 
-2. `config/application.yml` file should contain a valid Sendgrid API key
-value for `SENDGRID_KEY`.  You may need to `figaro heroku:set -e
-production` to get the key value into Heroku's production environment.
+2. `config/application.yml` file should contain the Mailgun-related keys above.
+You may need to `figaro heroku:set -e production` to get the key values into Heroku's production environment.
 
 3. Login to Audience1st as
-an administrator, go to Options, and enter the Sendgrid domain
+an administrator, go to Options, and enter the Mailgun domain
 (i.e. the domain from which transactional emails will appear to come,
 usually something like `your-app.herokuapp.com` for a staging
 environment).
 
 4.  Be sure that same domain name appears among the "allowed domains"
-in the Sendgrid settings, which can be accessed via the Resources >
-Sendgrid control panel in Heroku.
+in the Mailgun settings.  You'll have to set up various DNS entries to support DKIM as well.
 
 # To disable or change multi-tenancy
 

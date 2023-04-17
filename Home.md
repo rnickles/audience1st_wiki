@@ -173,6 +173,14 @@ environment).
 4.  Be sure that same domain name appears among the "allowed domains"
 in the Mailgun settings.  You'll have to set up various DNS entries to support DKIM as well.
 
+## Production cron jobs
+
+The main production deployment of Audience1st runs two periodic jobs using Heroku Scheduler:
+
+1. Daily around 1AM Pacific: `./bin/backup_postgres_to_s3`, a shell script that encrypts the entire Postgres database with `BACKUP_GPG_KEY` and backs it up to S3 bucket `BACKUP_S3_BUCKET` with a filename based on the current date.
+
+2. Every 10 minutes: `NEW_RELIC_AGENT_ENABLED=false rake a1:restart_if_memory_exceeded`, a Rake task that uses the Heroku API to check if any dynos have exceeded their memory quota (i.e. are swapping) and does a restart-all-dynos if so.  This relies on enabling [Heroku runtime metrics sampling](https://devcenter.heroku.com/articles/log-runtime-metrics) on the app.  Empirically, under heavy usage, the 512MB dynos start to swap and I need to figure out what allocation pattern causes this.
+
 # To disable or change multi-tenancy
 
 This requires removing a few files.  **Do not make any PRs that delete those files** since we need
